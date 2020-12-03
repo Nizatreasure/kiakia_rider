@@ -281,6 +281,7 @@ Future<String> verifyOTP(otp, verId) async {
         .update({'isNumberVerified': true});
     return '';
   } on FirebaseAuthException catch (e) {
+    print('error is $e');
     if (e.code == 'credential-already-in-use') {
       otpError = 'This number is already associated with another user account';
     } else if (e.code == 'invalid-verification-code') {
@@ -288,7 +289,10 @@ Future<String> verifyOTP(otp, verId) async {
     } else if (e.message ==
         'com.google.firebase.FirebaseException: User has already been linked to the given provider.') {
       otpError = 'A number has already been linked with this account';
-    } else
+    }
+    else if (e.code == 'session-expired')
+      otpError = 'Code expired. Please resend code and try again';
+    else
       otpError = 'An error occurred';
 
     return otpError;

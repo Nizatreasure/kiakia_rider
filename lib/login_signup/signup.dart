@@ -174,7 +174,7 @@ class _SignUpState extends State<SignUp> {
                                     onChanged: (val) {
                                       name = val;
                                       setState(() {
-                                        if (val.trim().length > 5)
+                                        if (val.trim().length > 4)
                                           nameValidate = true;
                                         else
                                           nameValidate = false;
@@ -196,7 +196,7 @@ class _SignUpState extends State<SignUp> {
                                     textCapitalization:
                                         TextCapitalization.words,
                                     validator: (val) {
-                                      if (val.trim().length < 6)
+                                      if (val.trim().length < 5)
                                         return '';
                                       else
                                         return null;

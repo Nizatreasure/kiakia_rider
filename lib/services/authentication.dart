@@ -100,6 +100,7 @@ class AuthenticationService {
                 return null;
               },
               codeSent: (verId, int resendToken) async {
+                error = '';
                 _resendToken = resendToken;
                 if (reload)
                   Navigator.pushReplacement(

@@ -25,9 +25,17 @@ class _VerifyNumberState extends State<VerifyNumber> {
       final response = await get('https://www.google.com');
       if (response.statusCode == 200) {
         DataSnapshot snapshot =
-            await FirebaseDatabase.instance.reference().child('riders').once();
+        await FirebaseDatabase.instance.reference().child('riders').once();
+        DataSnapshot snapshot2 =
+        await FirebaseDatabase.instance.reference().child('users').once();
         if (snapshot != null) {
           Map data = snapshot.value;
+          data.forEach((key, value) {
+            userNumbers.add(value['number']);
+          });
+        }
+        if (snapshot2 != null) {
+          Map data = snapshot2.value;
           data.forEach((key, value) {
             userNumbers.add(value['number']);
           });
@@ -87,6 +95,7 @@ class _VerifyNumberState extends State<VerifyNumber> {
                               setState(() {
                                 error = '';
                                 showError = false;
+                                showLoader = false;
                               });
                               if (val.trim().length == 10)
                                 FocusScope.of(context).focusedChild.unfocus();
@@ -148,6 +157,7 @@ class _VerifyNumberState extends State<VerifyNumber> {
                               : () async {
                                   if (_formKey.currentState.validate()) {
                                     setState(() {
+                                      error = '';
                                       showLoader = true;
                                       showError = false;
                                     });
@@ -178,6 +188,13 @@ class _VerifyNumberState extends State<VerifyNumber> {
                                           showError = true;
                                           error = _auth.error;
                                         });
+                                      else {
+                                        if (mounted) setState(() {
+                                          showError = true;
+                                          error = _auth.error;
+                                          showLoader = false;
+                                        });
+                                      }
                                     } else {
                                       setState(() {
                                         showLoader = false;
