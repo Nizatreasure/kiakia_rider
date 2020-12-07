@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart';
 import 'package:kiakia_rider/decoration.dart';
+import 'package:kiakia_rider/services/database.dart';
 import 'package:loading/indicator/ball_pulse_indicator.dart';
 import 'package:loading/loading.dart';
 
@@ -279,8 +281,19 @@ class _BankDetailsState extends State<BankDetails> {
                             disabledColor: Color.fromRGBO(57, 138, 239, 0.3),
                             minWidth: double.infinity,
                             onPressed: _accountNameController.text != null &&
-                                    _accountNameController.text.isNotEmpty
-                                ? () {}
+                                    _accountNameController.text.isNotEmpty &&
+                                    verified == 'true'
+                                ? () async {
+                                    await DatabaseService(FirebaseAuth
+                                            .instance.currentUser.uid)
+                                        .updateBankDetails({
+                                      'bankName': selectedBank.name,
+                                      'accountName':
+                                          _accountNameController.text,
+                                      'accountNumber':
+                                          _accountNumberController.text
+                                    });
+                                  }
                                 : null,
                             child: Text(
                               'Save',

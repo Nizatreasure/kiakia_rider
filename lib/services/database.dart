@@ -20,4 +20,10 @@ class DatabaseService {
       'pictureURL': url ?? '',
     });
   }
+
+  Future updateBankDetails (Map bankDetails) async {
+    return await users.child('riders').child(uid).update({
+      'bankDetails': bankDetails,
+    });
+  }
 }
